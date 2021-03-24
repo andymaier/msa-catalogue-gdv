@@ -60,20 +60,27 @@ public class CatalogueRestController {
 		System.out.println("Article: " + article.toString());
 		String id = UUID.randomUUID().toString();
 		article.setUuid(id);
-		Article newArticle = repo.save(article);
-		return ResponseEntity.created(builder.path("/articles/" + id).build().toUri()).body(newArticle);
+
+		Operation op = new Operation("article", "upsert", mapper.valueToTree(article));
+		kafka.send("shop", op);
+
+		//Article newArticle = repo.save(article);
+		//return ResponseEntity.created(builder.path("/articles/" + id).build().toUri()).body(newArticle);
+		return ResponseEntity.accepted().build();
 	}
 
 	@PutMapping("/{id}")
-	public Article updateArticle(@PathVariable String id, @RequestBody Article article) throws NotFoundException {
+	public ResponseEntity<Article> updateArticle(@PathVariable String id, @RequestBody Article article) throws NotFoundException {
 		if (!repo.existsById(id))
 			throw new NotFoundException();
 		article.setUuid(id);
-		return repo.save(article);
+		Operation op = new Operation("article", "upsert", mapper.valueToTree(article));
+		kafka.send("shop", op);
+		return ResponseEntity.accepted().build();
 	}
 
 	@PatchMapping("/{id}")
-	public Article patch(@PathVariable String id, @RequestBody JsonNode json) {
+	public ResponseEntity<Article> patch(@PathVariable String id, @RequestBody JsonNode json) {
 		Article old = get(id);
 		// JSON 3 Zustände: kein Attribut, null, Wert
 
@@ -88,12 +95,16 @@ public class CatalogueRestController {
 		if ( json.has("name")) {
 			old.setName( json.get("name").asText());
 		}
-		
-		return repo.save(old);
+
+		Operation op = new Operation("article", "upsert", mapper.valueToTree(old));
+		kafka.send("shop", op);
+		//return repo.save(old);
+		return ResponseEntity.accepted().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public void del(@PathVariable String id) {
-		repo.delete(get(id));
+		Operation op = new Operation("article", "delete", mapper.valueToTree(get(id)));
+		kafka.send("shop", op);
 	}
 }
