@@ -1,9 +1,20 @@
-POST http://localhost:8080/articles/
+POST http://localhost:8079/articles/
 Content-Type: application/json
 
 {
-    "name": "Weißwurst",
+    "name": "Oranges",
     "price": 3.90
 }
 
 ###
+
+GET http://localhost:8079/articles/
+
+###
+
+PATCH http://localhost:8079/articles/fc0b7122-c068-46b5-978b-137abab7fd8f
+Content-Type: application/json
+
+{
+    "uuid": "fc0b7122-c068-46b5-978b-137abab7fd87"    
+}
