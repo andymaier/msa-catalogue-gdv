@@ -2,8 +2,8 @@ POST http://localhost:8079/articles/
 Content-Type: application/json
 
 {
-    "name": "Oranges",
-    "price": 3.90
+    "name": "Grapes",
+    "price": 4.90
 }
 
 ###

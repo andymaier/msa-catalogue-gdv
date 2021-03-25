@@ -19,7 +19,7 @@ spring:
             non_contextual_creation: true
   kafka:
    consumer:
-      group-id: catalogue-1
+      group-id: catalogue-2
       auto-offset-reset: earliest
 
 server:
