@@ -18,9 +18,10 @@ spring:
           lob:
             non_contextual_creation: true
   kafka:
-   consumer:
+    consumer:
       group-id: catalogue-2
       auto-offset-reset: earliest
+    #bootstrap-servers: broker:29092
 
 server:
   port: 8079

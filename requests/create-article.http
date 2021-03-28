@@ -1,9 +1,9 @@
-POST http://localhost:8079/articles/
+POST http://localhost:18079/articles/
 Content-Type: application/json
 
 {
-    "name": "Apfel",
-    "price": 1.90
+    "name": "GDV-DL",
+    "price": 199.90
 }
 
 ###

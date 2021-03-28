@@ -27,19 +27,20 @@ public class ShopListener {
 		System.out.println("op = " + op);
 
 		Article article = mapper.treeToValue(op.getObject(), Article.class);
+		if(op.getBo().equals("article")) {
+			switch (op.getAction()) {
 
-		switch (op.getAction()) {
-
-			case "upsert":
-				repo.save(article);
-				break;
-			case "delete":
-				repo.delete(article);
-				break;
-			default:
-				ObjectError oenew = new ObjectError("Error", mapper.writeValueAsString(op));
-				Operation opnew = new Operation("obejct_error", "error_catalogue", mapper.valueToTree(oenew));
-				kafka.send("shop_error", opnew);
+				case "upsert":
+					repo.save(article);
+					break;
+				case "delete":
+					repo.delete(article);
+					break;
+				default:
+					ObjectError oenew = new ObjectError("Error", mapper.writeValueAsString(op));
+					Operation opnew = new Operation("obejct_error", "error_catalogue", mapper.valueToTree(oenew));
+					kafka.send("shop_error", opnew);
+			}
 		}
 	}
 }
